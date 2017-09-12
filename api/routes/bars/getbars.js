@@ -4,8 +4,6 @@ const { getToday } = require('../../utils');
 
 const YELP_API = 'https://api.yelp.com/v3/businesses/search';
 
-console.assert(process.env.YELP_TOKEN, "Environment variable YELP_TOKEN has to be set.");
-
 module.exports = function(req, res, next) {
   const { location, limit, offset } = req.query;
   const date = getToday();
