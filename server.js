@@ -4,23 +4,13 @@ const debug = require('debug')('fcc-nightlife:server');
 const express = require('express');
 const http = require('http');
 const logger = require('morgan');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const path = require('path');
 
+require('./api/config/database');
+require('./api/config/websockets');
+
 const app = express();
-
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, {
-  useMongoClient: true
-}).then(
-  () => console.log('MongoDB connected.'),
-  (err) => {
-    console.log('MongoDB not connected:', err )
-    process.exit(1);
-  }
-);
-
 const api = require('./api/routes/api');
 
 app.use(function(req, res, next) {
@@ -73,6 +63,8 @@ server.on('listening', () => {
     : 'port ' + addr.port;
   console.log('Listening on ' + bind);
 });
+
+require('./api/config/websockets')(server);
 
 /**
  * Event listener for HTTP server "error" event.
